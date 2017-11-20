@@ -1,0 +1,6 @@
+C:\Users\5IT\RiderProjects\Logging\Logger-Core\bin\Debug\Logger_Core.dll
+C:\Users\5IT\RiderProjects\Logging\Logger-Core\bin\Debug\Logger_Core.pdb
+C:\Users\5IT\RiderProjects\Logging\Logger-Core\obj\Debug\Logger-Core.csprojResolveAssemblyReference.cache
+C:\Users\5IT\RiderProjects\Logging\Logger-Core\obj\Debug\Logger-Core.csproj.CoreCompileInputs.cache
+C:\Users\5IT\RiderProjects\Logging\Logger-Core\obj\Debug\Logger_Core.dll
+C:\Users\5IT\RiderProjects\Logging\Logger-Core\obj\Debug\Logger_Core.pdb

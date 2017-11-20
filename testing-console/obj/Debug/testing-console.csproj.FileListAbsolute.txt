@@ -1,0 +1,8 @@
+C:\Users\5IT\RiderProjects\Logging\testing-console\bin\Debug\testing_console.exe
+C:\Users\5IT\RiderProjects\Logging\testing-console\bin\Debug\testing_console.pdb
+C:\Users\5IT\RiderProjects\Logging\testing-console\bin\Debug\Logger_Core.dll
+C:\Users\5IT\RiderProjects\Logging\testing-console\bin\Debug\Logger_Core.pdb
+C:\Users\5IT\RiderProjects\Logging\testing-console\obj\Debug\testing-console.csprojResolveAssemblyReference.cache
+C:\Users\5IT\RiderProjects\Logging\testing-console\obj\Debug\testing-console.csproj.CoreCompileInputs.cache
+C:\Users\5IT\RiderProjects\Logging\testing-console\obj\Debug\testing_console.exe
+C:\Users\5IT\RiderProjects\Logging\testing-console\obj\Debug\testing_console.pdb

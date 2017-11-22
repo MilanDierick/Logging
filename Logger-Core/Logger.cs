@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace Logger_Core
 {
@@ -7,6 +8,17 @@ namespace Logger_Core
     /// </summary>
     public static class Logger
     {
+        private static readonly string FilePath = Directory.GetCurrentDirectory();
+        private const string FileName = @"\log.txt";
+
+        static Logger()
+        {
+            if (!CheckForFile(true, false))
+                Log("Failed to create log file at path " + FilePath + FileName, LogLevel.Fatal);
+            else
+                Log("Succesfully created log file at path " + FilePath + FileName, LogLevel.Succes);
+        }
+
         /// <summary>
         /// Log is used to print a colored message to the console window.
         /// </summary>
@@ -15,7 +27,26 @@ namespace Logger_Core
         public static void Log(string message, LogLevel logLevel)
         {
             SetConsoleColour(logLevel);
-            Console.WriteLine("[" + TimeStamp() + "] " + logLevel.ToString().ToUpper() + ": " + message);
+            Console.WriteLine("[" + DateStamp() + " | " + TimeStamp() + "] " + logLevel.ToString().ToUpper() + ": " + message);
+        }
+        
+        /// <summary>
+        /// LogFile is used to write a formatted message to a file.
+        /// </summary>
+        /// <param name="message">Contains the message that will be written to the file.</param>
+        /// <param name="logLevel">Indicates the severity of the message.</param>
+        /// <param name="logToConsole"></param>
+        public static void LogFile(string message, LogLevel logLevel, bool logToConsole = true)
+        {
+            if (logToConsole)
+            {
+                Log(message, logLevel);
+            }
+            
+            using (var streamWriter = new StreamWriter(FilePath + FileName, true))
+            {
+                streamWriter.WriteLine("[" + DateStamp() + " | " + TimeStamp() + "] " + logLevel.ToString().ToUpper() + ": " + message);
+            }
         }
 
         private static void SetConsoleColour(LogLevel logLevel)
@@ -41,10 +72,17 @@ namespace Logger_Core
                     throw new ArgumentOutOfRangeException(nameof(logLevel), logLevel, null);
             }
         }
+        
+        private static string TimeStamp() => DateTime.Now.ToString("HH:mm:ss tt zz");
 
-        private static string TimeStamp()
+        private static string DateStamp() => DateTime.Today.ToShortDateString();
+
+        private static bool CheckForFile(bool createMissingFile, bool force)
         {
-            return DateTime.Now.ToString("HH:mm:ss tt zz");
+            if (File.Exists(FilePath + FileName) && !force) return true;
+            if (!createMissingFile) return false;
+            File.Create(FilePath + FileName);
+            return true;
         }
     }
 }

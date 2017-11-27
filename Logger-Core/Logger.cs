@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using static Logger_Core.StaticHelper;
 
 namespace Logger_Core
 {
@@ -15,7 +16,7 @@ namespace Logger_Core
         
         static Logger()
         {
-            CheckForFile(true, false);
+            CheckForFile(FilePath, FileName, createMissingFile: true, force: false);
         }
 
         /// <summary>
@@ -51,13 +52,23 @@ namespace Logger_Core
                 Log(message, logLevel, omitStamps);
             }
 
-            using (var streamWriter = new StreamWriter(FilePath + FileName, true))
+            try
             {
-                if (!omitStamps)
-                    streamWriter.WriteLine("[" + DateStamp() + " | " + TimeStamp() + "] " +
-                                           logLevel.ToString().ToUpper() + ": " + message);
-                else
-                    streamWriter.WriteLine(message);
+                using (var streamWriter = new StreamWriter(FilePath + FileName, true))
+                {
+                    if (!omitStamps)
+                        streamWriter.WriteLine("[" + DateStamp() + " | " + TimeStamp() + "] " +
+                                               logLevel.ToString().ToUpper() + ": " + message);
+                    else
+                        streamWriter.WriteLine(message);
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                Console.WriteLine(exception.Message);
+                Console.WriteLine(exception.StackTrace);
+                Log("message: '" + message + "' has not been logged to the log file!", LogLevel.Warning);
             }
         }
 
@@ -101,70 +112,6 @@ namespace Logger_Core
                         break;
                 }
             }
-        }
-
-        /// <summary>
-        /// Sets the desired console text colour.
-        /// </summary>
-        /// <param name="logLevel"></param>
-        /// <exception cref="ArgumentOutOfRangeException">Exception that is thrown when the provided loglevel is not valid.</exception>
-        private static void SetConsoleColour(LogLevel logLevel)
-        {
-            switch (logLevel)
-            {
-                case LogLevel.Info:
-                    Console.ForegroundColor = ConsoleColor.White;
-                    break;
-                case LogLevel.Warning:
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    break;
-                case LogLevel.Error:
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    break;
-                case LogLevel.Fatal:
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    break;
-                case LogLevel.Succes:
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(logLevel), logLevel, null);
-            }
-        }
-
-        /// <summary>
-        /// Helper method to generate a formatted string containing the current time.
-        /// </summary>
-        /// <returns>Returns a formatted string containing the current time.</returns>
-        private static string TimeStamp() => DateTime.Now.ToString("HH:mm:ss tt zz");
-
-        /// <summary>
-        /// Helper method to generate a formatted string containing the current date.
-        /// </summary>
-        /// <returns>Returns a formatted string containing the current date.</returns>
-        private static string DateStamp() => DateTime.Today.ToShortDateString();
-
-        /// <summary>
-        /// Helper method that checks if a file exists, and, if required, creates a new file.
-        /// </summary>
-        /// <param name="createMissingFile">Indicates if a new file should be created when the required file doesn't exist.</param>
-        /// <param name="force">Indicates if a new file should be created,even if the file already exists.</param>
-        /// <returns>Returns a boolean that indicates if the file exists.</returns>
-        private static bool CheckForFile(bool createMissingFile, bool force)
-        {
-            if (force)
-                File.Create(FilePath + FileName);
-            else if (!File.Exists(FilePath + FileName))
-                if (createMissingFile)
-                    File.Create(FilePath + FileName);
-                else
-                {
-                    Log("Log file doesn't exist, and the user doesn't want to create it.", LogLevel.Warning);
-                    return false;
-                }
-
-            LogFile("This file exists!", LogLevel.Succes);
-            return true;
         }
     }
 }

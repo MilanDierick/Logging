@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Configuration;
+using System.Runtime.InteropServices;
+using JetBrains.Annotations;
 using static Logger_Core.StaticHelper;
 
 namespace Logger_Core
@@ -16,7 +19,7 @@ namespace Logger_Core
         
         static Logger()
         {
-            CheckForFile(FilePath, FileName, createMissingFile: true, force: false);
+            CheckForFile(FilePath, FileName, true, false);
         }
 
         /// <summary>
@@ -25,7 +28,7 @@ namespace Logger_Core
         /// <param name="message">Contains the message that will be displayed.</param>
         /// <param name="logLevel">Indicates the severity of the message.</param>
         /// <param name="omitStamps"></param>
-        // ReSharper disable once MemberCanBePrivate.Global
+        [PublicAPI]
         public static void Log(string message, LogLevel logLevel, bool omitStamps = false)
         {
             SetConsoleColour(logLevel);
@@ -44,7 +47,7 @@ namespace Logger_Core
         /// <param name="logLevel">Indicates the severity of the message.</param>
         /// <param name="logToConsole"></param>
         /// <param name="omitStamps"></param>
-        // ReSharper disable once MemberCanBePrivate.Global
+        [PublicAPI]
         public static void LogFile(string message, LogLevel logLevel, bool logToConsole = true, bool omitStamps = false)
         {
             if (logToConsole)
@@ -76,7 +79,8 @@ namespace Logger_Core
         /// Helper method to read all the errors that have been written to the log file.
         /// </summary>
         /// <returns>A List that contains all the errors that have been written to the log file.</returns>
-        // ReSharper disable once MemberCanBePrivate.Global
+        [PublicAPI]
+        [MustUseReturnValue]
         public static IEnumerable<string> LoadLog()
         {
             return new List<string>(File.ReadAllLines(FilePath + FileName).ToList());
@@ -85,8 +89,10 @@ namespace Logger_Core
         /// <summary>
         /// Prints all the entrys in the log file to the console.
         /// </summary>
+        [PublicAPI]
         public static void PrintLoadedLog()
         {
+
             foreach (var entry in LoadLog())
             {
                 switch (entry[29])

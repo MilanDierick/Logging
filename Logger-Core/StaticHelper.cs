@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using JetBrains.Annotations;
 
 namespace Logger_Core
 {
@@ -10,6 +11,7 @@ namespace Logger_Core
         /// </summary>
         /// <param name="logLevel"></param>
         /// <exception cref="NotImplementedException">Thrown when the requesting log level is not implemented.</exception>
+        [UsedImplicitly]
         internal static void SetConsoleColour(LogLevel logLevel)
         {
             switch (logLevel)
@@ -38,12 +40,18 @@ namespace Logger_Core
         /// Helper method to generate a formatted string containing the current time.
         /// </summary>
         /// <returns>Returns a formatted string containing the current time.</returns>
+        [NotNull]
+        [UsedImplicitly]
+        [MustUseReturnValue]
         internal static string TimeStamp() => DateTime.Now.ToString("HH:mm:ss tt zz");
 
         /// <summary>
         /// Helper method to generate a formatted string containing the current date.
         /// </summary>
         /// <returns>Returns a formatted string containing the current date.</returns>
+        [NotNull]
+        [UsedImplicitly]
+        [MustUseReturnValue]
         internal static string DateStamp() => DateTime.Today.ToShortDateString();
 
         /// <summary>
@@ -54,7 +62,8 @@ namespace Logger_Core
         /// <param name="createMissingFile">Indicates if a new file should be created when the required file doesn't exist.</param>
         /// <param name="force">Indicates if a new file should be created,even if the file already exists.</param>
         /// <returns>Returns a boolean that indicates if the file exists.</returns>
-        internal static void CheckForFile(string filePath, string fileName, bool createMissingFile, bool force)
+        [UsedImplicitly]
+        internal static void CheckForFile([PathReference] string filePath, [PathReference] string fileName, bool createMissingFile, bool force)
         {
             if (force)
                 File.Create(filePath + fileName);
